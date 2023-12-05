@@ -1,15 +1,21 @@
 import logging
+
+import openai
 from aiogram import Bot, Dispatcher, types
-import g4f
 from aiogram.utils import executor
 
 # Включите логирование
 logging.basicConfig(level=logging.INFO)
 
 # Инициализация бота
-API_TOKEN = 'ВАШ ТОКЕН ТЕЛЕГРАМ'
-bot = Bot(token=API_TOKEN)
+API_TELEGRAM_TOKEN = 'ТОКЕН ДЛЯ ТЕЛЕГРАМ БОТА'
+API_VSEGPT_TOKEN = "АПИ КЛЮЧ С САЙТА VSEGPT"
+
+bot = Bot(token=API_TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
+
+openai.api_base = "https://api.vsegpt.ru:6070/v1"
+openai.api_key = API_VSEGPT_TOKEN
 
 # Словарь для хранения истории разговоров
 conversation_history = {}
@@ -35,6 +41,10 @@ async def send_welcome(message: types.Message):
     user_id = message.from_user.id
     user_input = message.text
 
+    if user_input == "/start":
+        await message.answer("Добро пожаловать в ChatGPT-бот!")
+        return
+
     if user_id not in conversation_history:
         conversation_history[user_id] = []
 
@@ -44,14 +54,14 @@ async def send_welcome(message: types.Message):
     chat_history = conversation_history[user_id]
 
     try:
-        response = await g4f.ChatCompletion.create_async(
-            model=g4f.models.default,
-            messages=chat_history,
-            provider=g4f.Provider.GeekGpt,
+        response = await openai.ChatCompletion.acreate(
+            model="openai/gpt-3.5-turbo",
+            messages=chat_history
+
         )
-        chat_gpt_response = response
+        chat_gpt_response = response["choices"][0]["message"]["content"]
     except Exception as e:
-        print(f"{g4f.Provider.GeekGpt.__name__}:", e)
+        print(e)
         chat_gpt_response = "Извините, произошла ошибка."
 
     conversation_history[user_id].append({"role": "assistant", "content": chat_gpt_response})
