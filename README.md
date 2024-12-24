@@ -10,6 +10,7 @@
 - `/sonnet` - Выбрать модель anthropic/claude-3.5-sonnet
 - `/haiku` - Выбрать модель anthropic/claude-3-5-haiku
 - `/gpt` - Выбрать модель openai/gpt-4o-latest
+- `/gemini` - Выбрать модель google/gemini-pro-1.5
 - `/model` - Выбрать другую модель ИИ (подсказки указаны в `models.py`)
 
 ## Установка зависимостей
@@ -23,7 +24,7 @@
 
 1. `API_TELEGRAM_TOKEN` - токен вашего бота от @botfather
 2. `API_VSEGPT_TOKEN` - ваш ключ API vsegpt.ru
-3. `ALLOWED_USERS` - Telegram id пользователей, которым разрешён доступ к этому боту, разделённые двоеточием
+3. `ALLOWED_USERS` - Telegram id чатов, из которых разрешён доступ к этому боту, разделённые двоеточием
 4. `VSEGPT_API_BASE` - адрес эндпоинта REST API, совместимого с OpenAI
 
 ## Запуск бота
